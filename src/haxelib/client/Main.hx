@@ -54,6 +54,7 @@ class Main {
 	static final HAXELIB_LIBNAME:ProjectName = ProjectName.ofString("haxelib");
 
 	static final VERSION_LONG:String = haxelib.Util.getHaxelibVersionLong();
+	static final HAXELIB_EDITION:String = "(Funkin' Crew Edition)";
 	static final VERSION:SemVer = SemVer.ofString(haxelib.Util.getHaxelibVersion());
 
 	final command:Command;
@@ -136,7 +137,7 @@ class Main {
 	}
 
 	function version() {
-		Cli.print(VERSION_LONG);
+		Cli.print(VERSION_LONG + ' ${HAXELIB_EDITION}');
 	}
 
 	static function combineAliases(name:String, aliases:Array<String>):String {
