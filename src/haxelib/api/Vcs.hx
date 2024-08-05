@@ -221,8 +221,6 @@ abstract class Vcs implements IVcs {
 			final out = p.stdout.readAll().toString();
 			final err = p.stderr.readAll().toString();
 			
-			
-
 			final code = p.exitCode();
 			{
 				code: code,
@@ -329,7 +327,18 @@ class Git extends Vcs {
 		
 		final oldCwd = Sys.getCwd();
 
-		final vcsArgs = ["clone", url, libPath];
+		final lsBranchArgs = ["ls-remote", "--symref", url, "HEAD"];
+		var regexp = new EReg('ref: refs/heads/([^[:space:]]*)', 'i');
+		regexp.match(run(lsBranchArgs, debugLog).out);
+		var branchOutput = regexp.matched(1);
+
+		if (branchOutput == "")
+			throw VcsError.CantCloneRepo(this, url);
+
+
+		Cli.print('The default branch is: ${branchOutput}');
+
+		final vcsArgs = ["clone", "--single-branch", "--branch", branchOutput, url, libPath];
 
 		Cli.printOptional('Cloning ${name} from ${url}');
 
@@ -349,6 +358,9 @@ class Git extends Vcs {
 				throw VcsError.CantCheckoutVersion(this, version, ret.out);
 			}
 		} else if (branch != null) {
+
+
+			run(["fetch", "origin", branch], debugLog);
 
 			Cli.printOptional('Checking out branch/commit ${branch} of ${libPath}');
 
