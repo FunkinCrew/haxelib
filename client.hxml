@@ -2,6 +2,5 @@
 -cp hx3compat/std
 -cp hx4compat/std
 -cp crypto/src
--cp haxe-strings/src
 -neko run.n
 -main haxelib.client.Main
