@@ -795,10 +795,6 @@ class Installer {
 
 			final currentBranch = vcsBranchesByLibraryName[library] ?? vcs.getReproducibleVersion(libPath).ref;
 
-			Cli.print(id);
-
-			Cli.print(id);
-
 			// TODO check different urls as well
 			if (branch != null && (!wasUpdated || currentBranch != branch)) {
 				final currentBranchStr = currentBranch != null ? currentBranch : "<unspecified>";
