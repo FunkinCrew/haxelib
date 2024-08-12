@@ -802,7 +802,7 @@ class Installer {
 					userInterface.log('Library $library $id repository remains at "$currentBranchStr"');
 					return;
 				}
-				// FsUtils.deleteRec(libPath);
+				FsUtils.deleteRec(libPath);
 				doVcsClone();
 			} else if (wasUpdated) {
 				userInterface.log('Library $library version ${vcs.directory} already up to date.');
