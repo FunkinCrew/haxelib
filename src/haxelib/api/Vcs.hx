@@ -361,8 +361,12 @@ class Git extends Vcs {
 			}
 		} else if (branch != null) {
 
+			// If it's not a commit hash, we need to set the branch to fetch since we did a shallow/single-branch clone
+			if (!LibraryData.isCommitHash(branch))
+				run(["remote", "set-branches", "--add", "origin", branch], debugLog);
 
 			run(["fetch", "origin", branch], debugLog);
+
 
 			Cli.printOptional('Checking out branch/commit ${branch} of ${libPath}');
 
