@@ -343,7 +343,12 @@ class Git extends Vcs {
 
 		final lsBranchArgs = ["ls-remote", "--symref", url, "HEAD"];
 		var regexp = new EReg('ref: refs/heads/([^[:space:]]*)', 'i');
-		regexp.match(run(lsBranchArgs, debugLog).out);
+		var branchOutput = run(lsBranchArgs, debugLog);
+
+		if (branchOutput.code != 0)
+			throw VcsError.CantCloneRepo(this, url);
+
+		regexp.match(branchOutput.out);
 		var branchOutput = regexp.matched(1);
 
 		if (branchOutput == "")
