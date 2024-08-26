@@ -222,7 +222,7 @@ class Main {
 			Version => create(version, 0),
 			Help => create(usage, 0),
 
-			#if neko
+			#if !js
 			Submit => create(submit, 3, true),
 			#end
 			Register => create(register, 5, true),
@@ -235,7 +235,7 @@ class Main {
 			DeleteRepo => create(deleteRepo, 0),
 			ConvertXml => create(convertXml, 0),
 			Run => create(run, null),
-			#if neko
+			#if !js
 			Proxy => create(proxy, 5, true),
 			#end
 			FixRepo => create(fixRepo, 0),
@@ -272,7 +272,7 @@ class Main {
 
 		try {
 			if (commandInfo.net) {
-				#if neko
+				#if !js
 				loadProxy();
 				#end
 				checkUpdate();
@@ -375,7 +375,7 @@ class Main {
 		return encodedPassword;
 	}
 
-	#if neko
+	#if !js
 	function getContributor(contributors:Array<String>): {name:String, password:String} {
 		var user:String = contributors[0];
 
@@ -802,7 +802,7 @@ class Main {
 		}
 	}
 
-	#if neko
+	#if !js
 	function proxy() {
 		final rep = getRepositoryPath();
 		final host = getArgument("Proxy host");
