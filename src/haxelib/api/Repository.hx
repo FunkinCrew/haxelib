@@ -1,5 +1,6 @@
 package haxelib.api;
 
+import haxelib.client.Cli;
 import haxelib.VersionData.VcsData;
 import sys.FileSystem;
 import sys.io.File;
@@ -170,7 +171,7 @@ class Repository {
 
 		final current = getCurrentFileContent(name);
 		if (getDevPath(name) == null && current == version)
-			throw 'Cannot remove current version of library $name';
+			throw 'Cannot remove current version of library $name, it\'s set as the current version';
 
 		try {
 			confirmRemovalAgainstDev(name, versionPath);
@@ -180,6 +181,9 @@ class Repository {
 		}
 
 		FsUtils.deleteRec(versionPath);
+		
+		var versions = getProjectInstallationInfo(name).versions.pop();
+		setCurrentVersion(name, versions);
 	}
 
 	/** Throws an error if removing `versionPath` conflicts with the dev path of library `name` **/
