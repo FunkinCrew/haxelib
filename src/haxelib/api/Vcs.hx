@@ -355,7 +355,13 @@ class Git extends Vcs {
 
 		Cli.print('The default branch is: ${branchOutput}');
 
+
+		// checkout.workers allows parallel checkout of files, setting to 0 will use as many workers as the number of logical cores
+		// https://git-scm.com/docs/git-checkout#Documentation/git-checkout.txt-checkoutworkers
+		run(["config", "--global", "checkout.workers", "0"], debugLog);
+		
 		var vcsArgs = ["clone", "--single-branch", "--branch", branchOutput, url, libPath];
+
 
 		if (Cli.mode != Quiet)
 			vcsArgs.push("--progress");
@@ -413,6 +419,9 @@ class Git extends Vcs {
 				Sys.setCwd(oldCwd);
 			}
 		}
+
+		run(["config", "--global", "checkout.workers", "1"], debugLog);
+
 			
 		// return prev. cwd:
 		Sys.setCwd(oldCwd);
