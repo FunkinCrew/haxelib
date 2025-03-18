@@ -193,7 +193,10 @@ abstract class Vcs implements IVcs {
 		};
 
 		// just in case process hangs waiting for stdin
-		p.stdin.close();
+		#if neko
+		if (!((untyped __dollar__version()) <= 240 && Sys.systemName() == "Windows"))
+		#end
+			p.stdin.close();
 
 		// In certain cases of git clones, it will hang on reading from stderr
 		// if we don't read from it. So we will always try to read from it.
