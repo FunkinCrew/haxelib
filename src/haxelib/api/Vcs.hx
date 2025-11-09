@@ -393,8 +393,10 @@ class Git extends Vcs {
 			if (!LibraryData.isCommitHash(branch))
 				run(["remote", "set-branches", "--add", "origin", branch], debugLog);
 
-			run(["fetch", "origin", branch], debugLog);
-
+			if (run(["fetch", "origin", branch], debugLog).code != 0) {
+				// can't find our commit on our shallow clone, so fetch all branches
+				run(["fetch", "origin", "refs/heads/*:refs/remotes/origin/*"], debugLog);
+			}
 
 			Cli.printOptional('Checking out branch/commit ${branch} of ${libPath}');
 
