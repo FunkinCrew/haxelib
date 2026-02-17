@@ -78,6 +78,7 @@ class Main {
 		if (args.flags.contains(SkipDependencies))
 			Installer.skipDependencies = true;
 		Vcs.flat = args.flags.contains(Flat);
+		Vcs.noShallow = args.flags.contains(NoShallow);
 
 		// connection setup
 		if (args.flags.contains(NoTimeout))
