@@ -72,6 +72,8 @@ enum abstract Flag(String) to String {
 	final SkipDependencies = "skip-dependencies";
 	@:alias("notimeout")
 	final NoTimeout = "no-timeout";
+	@:alias("noshallow")
+	final NoShallow = "no-shallow";
 
 	public static final MUTUALLY_EXCLUSIVE = [[Quiet, Debug], [Always, Never]];
 

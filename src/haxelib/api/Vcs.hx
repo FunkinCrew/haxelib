@@ -84,6 +84,8 @@ class VcsUpdateCancelled extends haxe.Exception {}
 abstract class Vcs implements IVcs {
 	/** If set to true, recursive cloning is disabled **/
 	public static var flat = false;
+	/** If set to true, the full commit history will be cloned (no shallow) **/
+	public static var noShallow = false;
 
 	public final name:String;
 	public final directory:String;
@@ -363,8 +365,10 @@ class Git extends Vcs {
 		// https://git-scm.com/docs/git-checkout#Documentation/git-checkout.txt-checkoutworkers
 		run(["config", "--global", "checkout.workers", "0"], debugLog);
 		
-		var vcsArgs = ["clone", "--single-branch", "--branch", branchOutput, url, libPath];
+		var vcsArgs = ["clone", "--branch", branchOutput, url, libPath];
 
+		if (!Vcs.noShallow)
+			vcsArgs = vcsArgs.concat(["--filter=tree:0", "--single-branch", "--depth", "1"]);
 
 		if (Cli.mode != Quiet)
 			vcsArgs.push("--progress");
@@ -393,7 +397,10 @@ class Git extends Vcs {
 			if (!LibraryData.isCommitHash(branch))
 				run(["remote", "set-branches", "--add", "origin", branch], debugLog);
 
-			run(["fetch", "origin", branch], debugLog);
+			var fetchArgs = ["fetch", "origin", branch];
+			if (!Vcs.noShallow)
+				fetchArgs = fetchArgs.concat(["--filter=tree:0", "--depth", "1"]);
+			run(fetchArgs, debugLog);
 
 
 			Cli.printOptional('Checking out branch/commit ${branch} of ${libPath}');
